@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StockPoint.Domain
-{
+
     namespace StockPoint.Domain
     {
         public class Cliente
@@ -17,4 +16,4 @@ namespace StockPoint.Domain
             public bool Activo { get; set; }
         }
     }
-}
+

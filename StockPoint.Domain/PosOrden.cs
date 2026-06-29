@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StockPoint.Domain
-{
-    using System;
-    using System.Collections.Generic;
 
     namespace StockPoint.Domain
     {
@@ -25,4 +21,4 @@ namespace StockPoint.Domain
             public string NombreCliente { get; set; }
         }
     }
-}
+

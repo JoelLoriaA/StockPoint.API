@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StockPoint.Domain
-{
-    using System.Collections.Generic;
+
 
     namespace StockPoint.Domain
     {
@@ -30,4 +28,4 @@ namespace StockPoint.Domain
             public List<Categoria> Categorias { get; set; } = new List<Categoria>();
         }
     }
-}
+
