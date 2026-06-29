@@ -1,6 +1,225 @@
 @StockPoint.API_HostAddress = http://localhost:5212
 
-GET {{StockPoint.API_HostAddress}}/weatherforecast/
+############################################################
+#  StockPoint API - Pruebas de endpoints (Joel)
+#  Equipo 3 - Gestión del Producto + Orden de Trabajo
+#  Ajuste el puerto en @StockPoint.API_HostAddress si su
+#  launchSettings.json usa otro (revise la consola al correr).
+############################################################
+
+
+# ==========================================================
+#  PRODUCTOS  (CRUD completo + búsqueda)
+# ==========================================================
+
+### Listar todos los productos
+GET {{StockPoint.API_HostAddress}}/api/productos
 Accept: application/json
+
+### Obtener un producto por id
+GET {{StockPoint.API_HostAddress}}/api/productos/1
+Accept: application/json
+
+### Obtener un producto inexistente -> 404
+GET {{StockPoint.API_HostAddress}}/api/productos/999999
+Accept: application/json
+
+### Buscar producto por nombre o código de barras
+GET {{StockPoint.API_HostAddress}}/api/productos/buscar?termino=co
+Accept: application/json
+
+### Buscar con término vacío -> 400
+GET {{StockPoint.API_HostAddress}}/api/productos/buscar?termino=
+Accept: application/json
+
+### Crear un producto válido -> 201 Created
+POST {{StockPoint.API_HostAddress}}/api/productos
+Content-Type: application/json
+
+{
+  "nombreEtiqueta": "Café Premium 500g",
+  "descripcion": "Café molido tostado oscuro",
+  "existenciaEnStock": 100,
+  "existenciaLimiteParaAlerta": 10,
+  "precioNeto": 3500,
+  "precioMinimo": 3000,
+  "precioMinimoConImpuesto": 3390,
+  "tieneImpuesto": true,
+  "impuestoValorAgregado": 0.13,
+  "impuestoLocal1": 0,
+  "impuestoLocal2": 0,
+  "puedeVenderse": true,
+  "puedeComprarse": true,
+  "codigoBarra": "7441111222333",
+  "categorias": []
+}
+
+### Crear un producto inválido (sin nombre, precio 0) -> 400
+POST {{StockPoint.API_HostAddress}}/api/productos
+Content-Type: application/json
+
+{
+  "nombreEtiqueta": "",
+  "precioNeto": 0,
+  "existenciaEnStock": 5,
+  "puedeVenderse": true,
+  "categorias": []
+}
+
+### Actualizar un producto existente -> 204 No Content
+PUT {{StockPoint.API_HostAddress}}/api/productos/1
+Content-Type: application/json
+
+{
+  "nombreEtiqueta": "Café Premium 500g (actualizado)",
+  "descripcion": "Café molido tostado oscuro, nueva presentación",
+  "existenciaEnStock": 120,
+  "existenciaLimiteParaAlerta": 15,
+  "precioNeto": 3700,
+  "precioMinimo": 3100,
+  "precioMinimoConImpuesto": 3503,
+  "tieneImpuesto": true,
+  "impuestoValorAgregado": 0.13,
+  "impuestoLocal1": 0,
+  "impuestoLocal2": 0,
+  "puedeVenderse": true,
+  "puedeComprarse": true,
+  "codigoBarra": "7441111222333",
+  "categorias": []
+}
+
+### Actualizar un producto inexistente -> 404
+PUT {{StockPoint.API_HostAddress}}/api/productos/999999
+Content-Type: application/json
+
+{
+  "nombreEtiqueta": "No existe",
+  "precioNeto": 1000,
+  "existenciaEnStock": 1,
+  "puedeVenderse": true,
+  "categorias": []
+}
+
+### Eliminar un producto -> 204 No Content
+DELETE {{StockPoint.API_HostAddress}}/api/productos/2
+
+### Eliminar un producto inexistente -> 404
+DELETE {{StockPoint.API_HostAddress}}/api/productos/999999
+
+
+# ==========================================================
+#  CLIENTES  (solo lectura)
+# ==========================================================
+
+### Listar todos los clientes
+GET {{StockPoint.API_HostAddress}}/api/clientes
+Accept: application/json
+
+### Obtener un cliente por id
+GET {{StockPoint.API_HostAddress}}/api/clientes/1
+Accept: application/json
+
+### Cliente inexistente -> 404
+GET {{StockPoint.API_HostAddress}}/api/clientes/999999
+Accept: application/json
+
+
+# ==========================================================
+#  EMPLEADOS  (solo lectura)
+# ==========================================================
+
+### Listar todos los empleados
+GET {{StockPoint.API_HostAddress}}/api/empleados
+Accept: application/json
+
+### Obtener un empleado por id
+GET {{StockPoint.API_HostAddress}}/api/empleados/1
+Accept: application/json
+
+### Empleado inexistente -> 404
+GET {{StockPoint.API_HostAddress}}/api/empleados/999999
+Accept: application/json
+
+
+# ==========================================================
+#  ÓRDENES DE TRABAJO  (maestro-detalle)
+# ==========================================================
+
+### Crear una orden válida -> 201 Created
+#   El precio unitario, subtotales, impuestos y total los calcula el Business;
+#   los valores que se envían aquí son ignorados/recalculados.
+POST {{StockPoint.API_HostAddress}}/api/ordenes
+Content-Type: application/json
+
+{
+  "fkCliente": 1,
+  "fkEmpleado": 1,
+  "detalles": [
+    {
+      "fkProducto": 1,
+      "cantidad": 2,
+      "descuento": 0
+    },
+    {
+      "fkProducto": 3,
+      "cantidad": 1,
+      "descuento": 100
+    }
+  ]
+}
+
+### Obtener una orden por número (use el número devuelto arriba)
+GET {{StockPoint.API_HostAddress}}/api/ordenes/1
+Accept: application/json
+
+### Orden inexistente -> 404
+GET {{StockPoint.API_HostAddress}}/api/ordenes/999999
+Accept: application/json
+
+### Crear orden sin detalles -> 400
+POST {{StockPoint.API_HostAddress}}/api/ordenes
+Content-Type: application/json
+
+{
+  "fkCliente": 1,
+  "fkEmpleado": 1,
+  "detalles": []
+}
+
+### Crear orden con cliente inexistente -> 404
+POST {{StockPoint.API_HostAddress}}/api/ordenes
+Content-Type: application/json
+
+{
+  "fkCliente": 999999,
+  "fkEmpleado": 1,
+  "detalles": [
+    { "fkProducto": 1, "cantidad": 1, "descuento": 0 }
+  ]
+}
+
+### Crear orden con producto inexistente -> 404
+POST {{StockPoint.API_HostAddress}}/api/ordenes
+Content-Type: application/json
+
+{
+  "fkCliente": 1,
+  "fkEmpleado": 1,
+  "detalles": [
+    { "fkProducto": 999999, "cantidad": 1, "descuento": 0 }
+  ]
+}
+
+### Crear orden con cantidad mayor a la existencia -> 409 Conflict (stock insuficiente)
+POST {{StockPoint.API_HostAddress}}/api/ordenes
+Content-Type: application/json
+
+{
+  "fkCliente": 1,
+  "fkEmpleado": 1,
+  "detalles": [
+    { "fkProducto": 1, "cantidad": 999999, "descuento": 0 }
+  ]
+}
 
 ###
