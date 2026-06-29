@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="StockPoint.API/StockPoint.API.csproj" />
+  <Project Path="StockPoint.Business/StockPoint.Business.csproj" />
+  <Project Path="StockPoint.Data/StockPoint.Data.csproj" />
+  <Project Path="StockPoint.Domain/StockPoint.Domain.csproj" />
+</Solution>
