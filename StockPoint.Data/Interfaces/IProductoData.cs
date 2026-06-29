@@ -7,6 +7,7 @@ namespace StockPoint.Data.Interfaces
     {
         List<Producto> ObtenerTodos();
         Producto ObtenerPorId(int id);
+        List<Producto> BuscarPorNombreOCodigo(string termino);
         int Crear(Producto producto);
         bool Actualizar(Producto producto);
         bool Eliminar(int id);

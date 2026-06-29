@@ -100,6 +100,13 @@ namespace StockPoint.Data
             {
                 lista.Add(MapearProducto(reader));
             }
+            reader.Close();
+
+            foreach (var producto in lista)
+            {
+                producto.Categorias = _categoriaData.ObtenerPorProducto(producto.ProductId, connection);
+            }
+
             return lista;
         }
 
