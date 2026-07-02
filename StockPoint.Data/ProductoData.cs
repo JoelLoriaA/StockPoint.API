@@ -133,6 +133,18 @@ namespace StockPoint.Data
                 AgregarParametros(command, producto);
                 int nuevoId = (int)command.ExecuteScalar();
 
+                // El código de barra se autogenera: prefijo fijo + product_id a 4 dígitos
+                // (mismo formato EAN-13 del seed: 750123456 + 0001 = 7501234560001).
+                string codigoBarra = $"750123456{nuevoId:D4}";
+                using (var codigoCommand = new SqlCommand(
+                    "UPDATE Producto SET codigo_barra = @codigo WHERE product_id = @id",
+                    connection, transaction))
+                {
+                    codigoCommand.Parameters.AddWithValue("@codigo", codigoBarra);
+                    codigoCommand.Parameters.AddWithValue("@id", nuevoId);
+                    codigoCommand.ExecuteNonQuery();
+                }
+
                 var idsCategoria = producto.Categorias?.Select(c => c.IdCategoria).ToList();
                 _categoriaData.AsignarCategorias(nuevoId, idsCategoria, connection, transaction);
 
@@ -161,8 +173,9 @@ namespace StockPoint.Data
                     precio_minimo_con_impuesto = @precioMinimoConImp, tiene_impuesto = @tieneImpuesto,
                     impuesto_valor_agregado = @iva, impuesto_local1 = @impLocal1,
                     impuesto_local2 = @impLocal2, puede_venderse = @puedeVenderse,
-                    puede_comprarse = @puedeComprarse, codigo_barra = @codigoBarra
+                    puede_comprarse = @puedeComprarse
                     WHERE product_id = @id";
+                // codigo_barra se omite a propósito: es inmutable tras la creación (autogenerado).
 
                 using var command = new SqlCommand(sql, connection, transaction);
                 command.Parameters.AddWithValue("@id", producto.ProductId);
