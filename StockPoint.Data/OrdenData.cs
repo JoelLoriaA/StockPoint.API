@@ -153,5 +153,41 @@ namespace StockPoint.Data
 
             return orden;
         }
+
+        // Órdenes en las que aparece un producto dado (para la vista "Ver producto").
+        public List<OrdenPorProducto> ObtenerPorProducto(int productId)
+        {
+            var lista = new List<OrdenPorProducto>();
+            using var connection = _conexion.ObtenerConexion();
+            connection.Open();
+
+            const string sql = @"SELECT o.numero_orden, o.fecha_orden,
+                                        c.nombre + ' ' + c.apellidos AS nombre_cliente,
+                                        d.cantidad, d.precio_unitario, d.precio_subtotal
+                                 FROM Pos_Orden_Detalle d
+                                 INNER JOIN Pos_Orden o ON o.numero_orden = d.fk_pos_orden
+                                 INNER JOIN Cliente c ON c.id = o.fk_cliente
+                                 WHERE d.fk_producto = @productId
+                                 ORDER BY o.numero_orden";
+
+            using var command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@productId", productId);
+
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                lista.Add(new OrdenPorProducto
+                {
+                    NumeroOrden = reader.GetInt32(0),
+                    FechaOrden = reader.GetDateTime(1),
+                    NombreCliente = reader.GetString(2),
+                    Cantidad = reader.GetInt32(3),
+                    PrecioUnitario = reader.GetDecimal(4),
+                    Subtotal = reader.GetDecimal(5)
+                });
+            }
+
+            return lista;
+        }
     }
 }

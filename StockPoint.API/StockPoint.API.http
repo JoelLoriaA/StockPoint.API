@@ -22,6 +22,18 @@ Accept: application/json
 GET {{StockPoint.API_HostAddress}}/api/productos/buscar?termino=
 Accept: application/json
 
+### Órdenes en las que se vendió un producto (vista "Ver producto")
+GET {{StockPoint.API_HostAddress}}/api/productos/1/ordenes
+Accept: application/json
+
+### Órdenes de un producto sin ventas -> [] (lista vacía)
+GET {{StockPoint.API_HostAddress}}/api/productos/5/ordenes
+Accept: application/json
+
+### Órdenes de un producto inexistente -> 404
+GET {{StockPoint.API_HostAddress}}/api/productos/999999/ordenes
+Accept: application/json
+
 ### Crear un producto válido -> 201 Created
 POST {{StockPoint.API_HostAddress}}/api/productos
 Content-Type: application/json

@@ -11,10 +11,12 @@ namespace StockPoint.API.Controllers
     public class ProductoController : ControllerBase
     {
         private readonly IProductoBusiness _productoBusiness;
+        private readonly IOrdenBusiness _ordenBusiness;
 
-        public ProductoController(IProductoBusiness productoBusiness)
+        public ProductoController(IProductoBusiness productoBusiness, IOrdenBusiness ordenBusiness)
         {
             _productoBusiness = productoBusiness;
+            _ordenBusiness = ordenBusiness;
         }
 
         // GET /api/productos
@@ -53,6 +55,25 @@ namespace StockPoint.API.Controllers
             catch (ValidacionException ex)
             {
                 return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        // GET /api/productos/{id}/ordenes
+        // Órdenes en las que se vendió el producto (para la vista "Ver producto").
+        [HttpGet("{id:int}/ordenes")]
+        public ActionResult<List<OrdenPorProducto>> ObtenerOrdenes(int id)
+        {
+            try
+            {
+                return Ok(_ordenBusiness.ObtenerOrdenesPorProducto(id));
+            }
+            catch (ValidacionException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (EntidadNoEncontradaException ex)
+            {
+                return NotFound(new { mensaje = ex.Message });
             }
         }
 

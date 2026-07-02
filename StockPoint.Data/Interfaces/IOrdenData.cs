@@ -6,5 +6,6 @@ namespace StockPoint.Data.Interfaces
     {
         int ProcesarOrden(PosOrden orden);
         PosOrden ObtenerPorNumero(int numeroOrden);
+        List<OrdenPorProducto> ObtenerPorProducto(int productId);
     }
 }

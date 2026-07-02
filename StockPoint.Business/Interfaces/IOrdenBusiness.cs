@@ -12,5 +12,11 @@ namespace StockPoint.Business.Interfaces
         int CrearOrden(PosOrden orden);
 
         PosOrden? ObtenerOrden(int numero);
+
+        /// <summary>
+        /// Devuelve el resumen de las órdenes en las que se vendió un producto.
+        /// Lanza EntidadNoEncontradaException si el producto no existe.
+        /// </summary>
+        List<OrdenPorProducto> ObtenerOrdenesPorProducto(int productId);
     }
 }

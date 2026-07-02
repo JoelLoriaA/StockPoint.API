@@ -119,6 +119,19 @@ namespace StockPoint.Business
             return _ordenData.ObtenerPorNumero(numero);
         }
 
+        public List<OrdenPorProducto> ObtenerOrdenesPorProducto(int productId)
+        {
+            if (productId <= 0)
+                throw new ValidacionException("El identificador del producto debe ser mayor que cero.");
+
+            // Se valida la existencia del producto para poder devolver 404 si no existe
+            // (una lista vacía significa "existe pero no tiene órdenes").
+            if (_productoBusiness.ObtenerPorId(productId) == null)
+                throw new EntidadNoEncontradaException($"No existe un producto con id {productId}.");
+
+            return _ordenData.ObtenerPorProducto(productId);
+        }
+
         /// <summary>
         /// Acepta el IVA tanto como fracción (0.13) como porcentaje (13) y lo
         /// devuelve siempre como fracción para multiplicar por el subtotal.
