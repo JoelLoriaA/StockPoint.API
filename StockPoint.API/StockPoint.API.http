@@ -1,16 +1,6 @@
 @StockPoint.API_HostAddress = http://localhost:5212
 
-############################################################
-#  StockPoint API - Pruebas de endpoints (Joel)
-#  Equipo 3 - Gestión del Producto + Orden de Trabajo
-#  Ajuste el puerto en @StockPoint.API_HostAddress si su
-#  launchSettings.json usa otro (revise la consola al correr).
-############################################################
-
-
-# ==========================================================
 #  PRODUCTOS  (CRUD completo + búsqueda)
-# ==========================================================
 
 ### Listar todos los productos
 GET {{StockPoint.API_HostAddress}}/api/productos
@@ -145,9 +135,6 @@ Accept: application/json
 #  ÓRDENES DE TRABAJO  (maestro-detalle)
 # ==========================================================
 
-### Crear una orden válida -> 201 Created
-#   El precio unitario, subtotales, impuestos y total los calcula el Business;
-#   los valores que se envían aquí son ignorados/recalculados.
 POST {{StockPoint.API_HostAddress}}/api/ordenes
 Content-Type: application/json
 
@@ -221,5 +208,3 @@ Content-Type: application/json
     { "fkProducto": 1, "cantidad": 999999, "descuento": 0 }
   ]
 }
-
-###
