@@ -361,3 +361,23 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# ---- Secrets and local configuration (never commit real values) ----
+appsettings.Local.json
+appsettings.*.local.json
+appsettings.Production.json
+secrets.json
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.p12
+*.snk
+*.publishsettings
+
+# ---- Local databases and backups ----
+*.mdf
+*.ldf
+*.bak
+*.sqlite
+*.db
