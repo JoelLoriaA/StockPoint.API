@@ -79,4 +79,4 @@ In [StockPoint-WPF](https://github.com/AdrianBarbozaV/StockPoint-WPF), Joel Lor√
 
 ## License
 
-No license is currently specified for this repository.
+This project is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE). Copyright (c) 2026 Joel Lor√≠a Arcia and Jared Morales Morales.
